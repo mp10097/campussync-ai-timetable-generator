@@ -1,0 +1,1 @@
+# campussync-ai-timetable-generator
