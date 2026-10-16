@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CampusSync AI | Smart Campus Timetables</title>
+  <meta name="description" content="CampusSync helps campuses organize teachers, rooms, subjects, divisions, and weekly timetables.">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="#" aria-label="CampusSync home">
+        <span class="brand-mark">C</span>
+        <span><strong>Campus</strong><b>Sync</b><small>Timetable studio</small></span>
+      </a>
+      <div class="side-label">WORKSPACE</div>
+      <nav class="nav">
+        <button class="nav-item active" data-view="overview"><span>▦</span> Overview</button>
+        <button class="nav-item" data-view="timetable"><span>▤</span> Timetable</button>
+        <button class="nav-item" data-view="master"><span>◫</span> Master data</button>
+        <button class="nav-item" data-view="conflicts"><span>◇</span> Conflicts <em id="conflictNav">0</em></button>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="status-dot"></div>
+        <div><strong>Local workspace</strong><small>Demo data saved in this browser</small></div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div><span class="eyebrow">CAMPUS OPERATIONS</span><h1 id="pageTitle">Overview</h1></div>
+        <div class="top-actions"><span class="connection"><i></i> Workspace ready</span><button class="avatar" title="Profile">CS</button></div>
+      </header>
+
+      <section id="overviewView" class="view">
+        <div class="hero">
+          <div class="hero-copy">
+            <span class="eyebrow light">LIVE CAMPUS WORKSPACE</span>
+            <h2>Build a better<br>campus schedule.</h2>
+            <p>Add your teachers, rooms, subjects, and divisions. Then generate a conflict-aware timetable from the data you actually use.</p>
+            <div class="hero-actions">
+              <button class="btn btn-light" data-go="master">＋ Add data</button>
+              <button class="btn btn-glass" id="heroGenerate">✦ Generate timetable</button>
+            </div>
+          </div>
+          <div class="hero-art" aria-hidden="true">
+            <div class="art-orbit orbit-one"></div><div class="art-orbit orbit-two"></div>
+            <div class="calendar-card"><div class="cal-head"><span>WEEKLY PLAN</span><span class="cal-dot"></span></div><div class="cal-title">Your week, in sync.</div><div class="mini-grid">
+              <span></span><span>M</span><span>T</span><span>W</span><span>T</span>
+              <span>09</span><i></i><i></i><i></i><i></i>
+              <span>10</span><i class="mint"></i><i></i><i class="lav"></i><i></i>
+              <span>11</span><i></i><i class="peach"></i><i></i><i class="mint"></i>
+              <span>12</span><i class="lav"></i><i></i><i class="mint"></i><i></i>
+            </div></div>
+            <div class="floating-check">✓ <span>Conflict-aware</span></div>
+          </div>
+        </div>
+
+        <div class="metric-grid">
+          <article class="metric"><div class="metric-top"><span>Teachers</span><span class="metric-icon purple">♙</span></div><strong id="teacherCount">0</strong><small>In your workspace</small></article>
+          <article class="metric"><div class="metric-top"><span>Rooms &amp; labs</span><span class="metric-icon blue">⌂</span></div><strong id="roomCount">0</strong><small>Available spaces</small></article>
+          <article class="metric"><div class="metric-top"><span>Divisions</span><span class="metric-icon orange">▦</span></div><strong id="divisionCount">0</strong><small>Student groups</small></article>
+          <article class="metric"><div class="metric-top"><span>Scheduled sessions</span><span class="metric-icon green">✓</span></div><strong id="sessionCount">0</strong><small>In latest timetable</small></article>
+        </div>
+
+        <div class="content-grid">
+          <section class="panel timetable-panel">
+            <div class="panel-heading"><div><h3>Weekly timetable</h3><p>Generated from your current master data</p></div><button class="text-btn" data-go="timetable">View timetable ↗</button></div>
+            <div id="overviewTimetable" class="empty-state"><div class="empty-icon">▤</div><strong>No draft yet</strong><p>Add master data, then generate your first timetable.</p><button class="btn btn-primary" data-go="master">Add your first data</button></div>
+          </section>
+          <section class="panel checks-panel">
+            <div class="panel-heading"><div><h3>Schedule health</h3><p>Checks for your latest draft</p></div><span class="health-badge">● Ready</span></div>
+            <div class="check-row"><span class="check-icon">✓</span><div><strong>Hard constraints</strong><small>Teacher, room, and division collisions</small></div><b id="constraintStatus">Pending</b></div>
+            <div class="check-row"><span class="check-icon">◎</span><div><strong>Data readiness</strong><small id="dataReadiness">0 master records available</small></div><b id="readinessStatus">0 records</b></div>
+            <div class="next-action"><span class="eyebrow">NEXT ACTION</span><strong id="nextAction">Add your campus data</strong><p>Keep adding records to model your campus.</p><button class="text-btn" data-go="master">Open master data →</button></div>
+          </section>
+        </div>
+      </section>
+
+      <section id="masterView" class="view hidden">
+        <div class="section-intro"><div><span class="eyebrow">SETUP</span><h2>Master data</h2><p>Add the resources that make up your campus schedule.</p></div><button class="btn btn-primary" id="openAddModal">＋ Add record</button></div>
+        <div class="tabs" role="tablist">
+          <button class="tab active" data-tab="teachers">Teachers <span id="teacherTabCount">0</span></button>
+          <button class="tab" data-tab="rooms">Rooms &amp; labs <span id="roomTabCount">0</span></button>
+          <button class="tab" data-tab="subjects">Subjects <span id="subjectTabCount">0</span></button>
+          <button class="tab" data-tab="divisions">Divisions <span id="divisionTabCount">0</span></button>
+        </div>
+        <section class="panel data-panel"><div class="panel-heading"><div><h3 id="tableTitle">Teachers</h3><p id="tableDescription">Manage teachers and their availability.</p></div></div><div id="recordsTable"></div></section>
+      </section>
+
+      <section id="timetableView" class="view hidden">
+        <div class="section-intro"><div><span class="eyebrow">SCHEDULING</span><h2>Timetable</h2><p>Build a weekly plan using your campus master data.</p></div><button class="btn btn-primary" id="generateBtn">✦ Generate timetable</button></div>
+        <div id="timetableNotice" class="notice hidden"></div>
+        <section class="panel timetable-full"><div class="panel-heading"><div><h3>Weekly timetable</h3><p>Monday – Saturday · 09:00–16:00</p></div><span class="health-badge" id="timetableStatus">No draft yet</span></div><div id="fullTimetable" class="empty-state"><div class="empty-icon">▤</div><strong>Your timetable is waiting</strong><p>Add teachers, rooms, subjects and divisions, then generate a draft.</p><button class="btn btn-primary" data-go="master">Set up master data</button></div></section>
+      </section>
+
+      <section id="conflictsView" class="view hidden">
+        <div class="section-intro"><div><span class="eyebrow">VALIDATION</span><h2>Conflicts</h2><p>Review scheduling checks for your latest timetable.</p></div><button class="btn btn-primary" data-go="timetable">Review timetable</button></div>
+        <section class="panel"><div class="panel-heading"><div><h3>Constraint checks</h3><p>Checks run when you generate a timetable.</p></div></div><div id="conflictContent" class="empty-state"><div class="empty-icon">✓</div><strong>No conflicts to review</strong><p>Generate a timetable to run the checks.</p></div></section>
+      </section>
+    </main>
+  </div>
+
+  <div class="modal-backdrop hidden" id="modalBackdrop">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal-heading"><div><span class="eyebrow">MASTER DATA</span><h2 id="modalTitle">Add teacher</h2></div><button class="icon-btn" id="closeModal" aria-label="Close">×</button></div>
+      <form id="recordForm">
+        <label>Record type<select id="recordType"><option value="teachers">Teacher</option><option value="rooms">Room / lab</option><option value="subjects">Subject</option><option value="divisions">Division</option></select></label>
+        <label id="nameLabel">Teacher name<input id="recordName" required placeholder="e.g. Aisha Sharma"></label>
+        <label id="detailLabel">Department<input id="recordDetail" placeholder="e.g. Computer Science"></label>
+        <div class="form-actions"><button type="button" class="btn btn-secondary" id="cancelModal">Cancel</button><button type="submit" class="btn btn-primary">Save record</button></div>
+      </form>
+    </div>
+  </div>
+  <div class="toast hidden" id="toast" role="status"></div>
+  <script src="app.js"></script>
+</body>
+</html>
